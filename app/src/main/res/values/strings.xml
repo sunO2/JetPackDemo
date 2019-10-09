@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">JetPackDemo</string>
     <string name="navigation">Navigation</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navigation_a">Navigation_A</string>
+    <string name="navigation_b">Navigation_B</string>
+    <string name="jet_pack_cameraX">CameraX</string>
+    <string name="jet_pack_room">Room</string>
 </resources>

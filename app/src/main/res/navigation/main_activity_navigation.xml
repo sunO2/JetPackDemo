@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_activity_navigation">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_navigation"
+    app:startDestination="@id/main_fragment">
 
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="com.hezhihu89.fragment.MainFragment"
+        android:label="fragment_navigation"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_navigationFragment_to_navigationFragmentA"
+            app:destination="@id/navigationFragment"
+            app:enterAnim="@anim/app_nav_default_enter_anim"
+            app:exitAnim="@anim/app_nav_default_exit_anim"
+            app:popEnterAnim="@anim/app_nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/app_nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_main_fragment_to_cameraXFragment"
+            app:destination="@id/cameraXFragment"
+            app:enterAnim="@anim/app_nav_default_enter_anim"
+            app:exitAnim="@anim/app_nav_default_exit_anim"
+            app:popEnterAnim="@anim/app_nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/app_nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigationFragment"
+        android:name="com.hezhihu89.fragment.navigation.NavigationFragment"
+        android:label="fragment_navigation2"
+        tools:layout="@layout/fragment_navigation" >
+        <action
+            android:id="@+id/action_navigationFragment_to_navigationFragmentA2"
+            app:destination="@id/navigationFragmentA"
+            app:enterAnim="@anim/app_nav_default_enter_anim"
+            app:exitAnim="@anim/app_nav_default_exit_anim"
+            app:popEnterAnim="@anim/app_nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/app_nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_navigationFragment_to_navigationFragmentB"
+            app:destination="@id/navigationFragmentB"
+            app:enterAnim="@anim/app_nav_default_enter_anim"
+            app:exitAnim="@anim/app_nav_default_exit_anim"
+            app:popEnterAnim="@anim/app_nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/app_nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigationFragmentA"
+        android:name="com.hezhihu89.fragment.navigation.NavigationFragmentA"
+        android:label="fragment_navigation_a"
+        tools:layout="@layout/fragment_navigation_a" />
+    <fragment
+        android:id="@+id/navigationFragmentB"
+        android:name="com.hezhihu89.fragment.navigation.NavigationFragmentB"
+        android:label="fragment_navigation_fragment_b"
+        tools:layout="@layout/fragment_navigation_fragment_b" />
+    <fragment
+        android:id="@+id/cameraXFragment"
+        android:name="com.hezhihu89.fragment.cameraX.CameraXFragment"
+        android:label="fragment_camera_x"
+        tools:layout="@layout/fragment_camera_x" />
+    <fragment
+        android:id="@+id/roomFragment"
+        android:name="com.hezhihu89.jetpackdemo.RoomFragment"
+        android:label="fragment_room"
+        tools:layout="@layout/fragment_room" />
 </navigation>
