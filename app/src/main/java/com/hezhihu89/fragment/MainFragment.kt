@@ -89,7 +89,7 @@ class MainFragment : Fragment() {
         onRequestPermissionsResult(requestCode, grantResults)
     }
 
-    @NeedsPermission(Manifest.permission.CAMERA)
+    @NeedsPermission(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun openCameraFragment(){
         Navigation.findNavController(jet_pack_cameraX).navigate(R.id.cameraXFragment,null,navOptions {
             anim {
@@ -101,12 +101,12 @@ class MainFragment : Fragment() {
         })
     }
 
-    @OnPermissionDenied(Manifest.permission.CAMERA)
+    @OnPermissionDenied(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun onCameraPermissionDenied(){
         Toast.makeText(this.context,"权限被拒绝",Toast.LENGTH_SHORT).show()
     }
 
-    @OnNeverAskAgain(Manifest.permission.CAMERA)
+    @OnNeverAskAgain(Manifest.permission.CAMERA,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun onCameraNeverAskAgain() {
         Toast.makeText(context, "权限被拒绝永久拒绝", Toast.LENGTH_SHORT).show()
     }

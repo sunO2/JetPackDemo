@@ -39,6 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:text="删除"
+        android:id="@+id/room_delete"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <ScrollView
         android:fillViewport="true"
         android:layout_marginTop="@dimen/dp16"

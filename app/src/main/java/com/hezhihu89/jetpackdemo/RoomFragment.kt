@@ -15,12 +15,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.hezhihu89.fragment.dao.AppDataBase
+import com.hezhihu89.fragment.dao.BaseDao
 import com.hezhihu89.fragment.dao.UserDao
+import com.hezhihu89.fragment.entity.Address
 import com.hezhihu89.fragment.entity.User
-import com.hezhihu89.fragment.kt.checkEmpt
-import com.hezhihu89.fragment.kt.isFalse
-import com.hezhihu89.fragment.kt.isTrue
-import com.hezhihu89.fragment.kt.value
+import com.hezhihu89.fragment.kt.*
 import kotlinx.android.synthetic.main.fragment_room.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -34,7 +33,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class RoomFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
 
@@ -58,7 +57,25 @@ class RoomFragment : Fragment() {
         room_insert.setOnClickListener{
             insertUser()
         }
-        room_insert.addTextChangedListener {  }
+
+        val userDao = AppDataBase.instance.getUserDao()
+        userDao.getAllByDateAsc().observe(this, Observer {
+            val sb = StringBuilder()
+            sb.append("ID   ").append("|").append("姓名   ").append("|").append("姓   ").append("|").append("城市   ").append("|").append("邮编   ").appendln("|")
+
+            it.forEach{forIt ->
+                sb.appendln("------------------------------------------------------------------")
+                sb.append(forIt.userID).append("    |").append(forIt.userName).append("       |").append(forIt.firstName).append("       |").append(forIt.address.city).append("       |").append(forIt.address.postNumber).appendln("        |")
+            }
+            query_all_tv.text = sb.toString()
+        })
+
+        room_delete.click {
+            checkEmpt(room_user_id.value())
+                    .isFalse {
+                        userDao.delete(room_user_id.value().toLong())
+                    }
+        }
     }
 
     /**
@@ -83,13 +100,7 @@ class RoomFragment : Fragment() {
                 .isFalse {
                     Toast.makeText(context,"插入数据库",Toast.LENGTH_SHORT).show()
                     val userDao = AppDataBase.instance.getUserDao()
-                    userDao.insert(User(userId,userName, firstName, lastName))
-
-                    val sb = StringBuilder()
-                    userDao.getAllByDateDesc().forEach{
-                        sb.appendln(it.toString())
-                    }
-                    query_all_tv.text = sb.toString()
+                    userDao.insert(User(userId,userName, firstName, lastName,Address("北京",10090)))
                 }
                 .isTrue {
                     Toast.makeText(context,"输入为空",Toast.LENGTH_SHORT).show()

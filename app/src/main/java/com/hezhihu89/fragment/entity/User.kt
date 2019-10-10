@@ -1,5 +1,6 @@
 package com.hezhihu89.fragment.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 
 /**
@@ -13,4 +14,12 @@ data class User (
     var userName: String,
     var firstName: String,
     var lastName: String
+    ,
+    @Embedded
+    var address: Address
+)
+
+data class Address(
+        var city: String,
+        var postNumber: Int
 )

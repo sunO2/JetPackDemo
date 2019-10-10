@@ -1,5 +1,6 @@
 package com.hezhihu89.fragment.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.hezhihu89.fragment.entity.User
@@ -13,15 +14,22 @@ import com.hezhihu89.fragment.entity.User
 interface UserDao: BaseDao<User>{
 
     @Query("select * from User")
-    fun getAllUser():MutableList<User>
+    fun getAllUser():LiveData<MutableList<User>>
 
     @Query("select * from User where userID = :studentID")
     fun getUser(studentID:Int):User
 
-    @Query("select * from User order by userID desc ")
-    fun getAllByDateDesc():MutableList<User>
+    @Query("select * from User order by userID asc ")
+    fun getAllByDateAsc():LiveData<MutableList<User>>
 
     @Query("delete from User")
     fun deleteAll()
+
+    /**
+     * 根据ID 删除User
+     * @param userId 用户ID
+     */
+    @Query("delete from User where userID = :userId")
+    fun delete(userId: Long)
 
 }

@@ -1,5 +1,6 @@
 package com.hezhihu89.fragment.kt
 
+import android.view.View
 import android.widget.TextView
 
 /**
@@ -9,4 +10,10 @@ import android.widget.TextView
  */
 fun TextView.value(): String{
     return text.toString()
+}
+
+fun View.click(click: (View)-> Unit){
+    setOnClickListener{
+        click(it)
+    }
 }
