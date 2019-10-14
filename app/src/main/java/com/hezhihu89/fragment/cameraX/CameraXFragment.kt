@@ -1,33 +1,31 @@
 package com.hezhihu89.fragment.cameraX
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.LinearLayout
 import androidx.camera.core.*
 import com.bumptech.glide.Glide
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import com.hezhihu89.fragment.OnFragmentInteractionListener
-import com.hezhihu89.fragment.kt.click
-import com.hezhihu89.fragment.kt.fullScreen
-import com.hezhihu89.fragment.kt.isFalse
-import com.hezhihu89.fragment.kt.noFullScreen
+import com.hezhihu89.kt.click
+import com.hezhihu89.kt.fullScreen
+import com.hezhihu89.kt.isFalse
+import com.hezhihu89.kt.noFullScreen
 import com.hezhihu89.jetpackdemo.R
 import kotlinx.android.synthetic.main.fragment_camera_x.*
 import kotlinx.coroutines.*
 import java.io.File
 import java.lang.StringBuilder
-import java.util.*
-import kotlin.Result
+import com.google.zxing.BarcodeFormat
+import com.hezhihu89.utils.DefaultThreadFactory
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,6 +50,10 @@ class CameraXFragment : Fragment() {
     private val reader: MultiFormatReader = MultiFormatReader()
 
     private val logSb = StringBuilder()
+
+    private val threadPoole = ThreadPoolExecutor(1, 1,
+            0L, TimeUnit.MILLISECONDS,
+            LinkedBlockingQueue<Runnable>(), DefaultThreadFactory("拍照处理-CameraX"))
 
     private lateinit var imageCapture: ImageCapture
 
@@ -85,31 +87,7 @@ class CameraXFragment : Fragment() {
             false
         }
 
-        ////预览配置
-        val preview = PreviewConfig
-                .Builder()
-                .apply{
-
-                }
-                .build()
-                .let {
-                    Preview(it).apply {
-                        onPreviewOutputUpdateListener = Preview.OnPreviewOutputUpdateListener {
-                            output -> jet_pack_camera_texture.surfaceTexture = output?.surfaceTexture
-                        }
-                    }
-                }
-
-        imageCapture = ImageCaptureConfig
-                .Builder()
-                .apply {
-
-                }
-                .build()
-                .let {
-                    ImageCapture(it)
-                }
-
+        jet_pack_camera_view.bindToLifecycle(this)
 
         val imageAnalysis = ImageAnalysisConfig.Builder()
                 .apply{
@@ -118,9 +96,9 @@ class CameraXFragment : Fragment() {
                 .build()
                 .let {
                     val imageAnalysis = ImageAnalysis(it)
-                    imageAnalysis.analyzer = ImageAnalysis.Analyzer { image: ImageProxy?, rotationDegrees: Int ->
+                    imageAnalysis.setAnalyzer(threadPoole, ImageAnalysis.Analyzer {image, _ ->
 
-                        image?.apply {
+                        image.apply {
                             val buffer = planes[0].buffer
                             val data = ByteArray(buffer.remaining())
                             val height = height
@@ -129,7 +107,7 @@ class CameraXFragment : Fragment() {
 
                             GlobalScope.launch(Dispatchers.Main) {
                                 val result = GlobalScope.async {
-                                    val result = image.let {itLet ->
+                                    val result = image.let { itLet ->
 
                                         val source = PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false)
 
@@ -137,7 +115,7 @@ class CameraXFragment : Fragment() {
 
                                         try {
                                             val result = reader.decode(bitmap)
-                                            Log.d(TAG,result.toString())
+                                            Log.d(TAG, result.toString())
                                             result
                                         } catch (e: Exception) {
                                             null
@@ -145,7 +123,7 @@ class CameraXFragment : Fragment() {
                                     }
                                     result
                                 }
-                                result.await()?.apply{
+                                result.await()?.apply {
                                     logSb.contains(this.text).isFalse {
                                         logSb.append("解析结果：").appendln(this)
                                         jet_pack_cameraX_log.text = logSb.toString()
@@ -153,13 +131,10 @@ class CameraXFragment : Fragment() {
                                 }
                             }
                         }
-
-
-                    }
+                    })
                     imageAnalysis
                 }
-
-        CameraX.bindToLifecycle(this,preview,imageCapture,imageAnalysis)
+        CameraX.bindToLifecycle(this,imageAnalysis)
 
         ///拍照
         jet_pack_cameraX_take.click {
@@ -178,18 +153,19 @@ class CameraXFragment : Fragment() {
                     }
                 }
 
-        imageCapture.takePicture(
+        jet_pack_camera_view.takePicture(
                 File(photoFilePath,"${System.currentTimeMillis()}.jpg"),
-                object: ImageCapture.OnImageSavedListener{
+                threadPoole,
+                object: ImageCapture.OnImageSavedListener {
+
+                    override fun onImageSaved(file: File) {
+                        jet_pack_cameraX_take_pre.post{
+                            Glide.with(this@CameraXFragment).load(file).into(jet_pack_cameraX_take_pre)
+                        }
+                    }
 
                     override fun onError(imageCaptureError: ImageCapture.ImageCaptureError, message: String, cause: Throwable?) {
                     }
-
-                    override fun onImageSaved(file: File) {
-                        Log.d(TAG,"存储路径：$file")
-                        Glide.with(this@CameraXFragment).load(file).into(jet_pack_cameraX_take_pre)
-                    }
-
                 }
         )
     }

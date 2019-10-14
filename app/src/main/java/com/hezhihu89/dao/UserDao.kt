@@ -1,9 +1,9 @@
-package com.hezhihu89.fragment.dao
+package com.hezhihu89.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
-import com.hezhihu89.fragment.entity.User
+import com.hezhihu89.entity.User
 
 /**
  * @author hezhihu89

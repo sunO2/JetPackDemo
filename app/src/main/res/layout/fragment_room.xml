@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/dp16"
-    tools:context=".RoomFragment">
+    tools:context="com.hezhihu89.fragment.room.RoomFragment">
 
     <EditText
         android:hint="输入ID"
@@ -46,17 +46,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <ScrollView
+    <HorizontalScrollView
         android:fillViewport="true"
         android:layout_marginTop="@dimen/dp16"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/query_all_tv"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/room_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
-    </ScrollView>
+    </HorizontalScrollView>
 
 </LinearLayout>

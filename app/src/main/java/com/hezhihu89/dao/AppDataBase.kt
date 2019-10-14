@@ -1,4 +1,4 @@
-package com.hezhihu89.fragment.dao
+package com.hezhihu89.dao
 
 import androidx.room.Database
 import androidx.room.Room
@@ -6,14 +6,16 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.hezhihu89.fragment.APP
-import com.hezhihu89.fragment.entity.User
+import com.hezhihu89.entity.User
+import com.hezhihu89.utils.newSingleThreadExecutor
+import java.util.concurrent.ExecutorCompletionService
 
 /**
  * @author hezhihu89
  * 创建时间 2019 年 10 月 09 日 17:09
  * 功能描述:
  */
-@Database(entities = [User::class],version = 2)
+@Database(entities = [User::class],version = 3)
 abstract class AppDataBase: RoomDatabase(){
 
     abstract fun getUserDao(): UserDao
@@ -34,7 +36,6 @@ abstract class AppDataBase: RoomDatabase(){
                 }
             }
         }
-
         val instance = Single.sin
     }
 
@@ -43,8 +44,8 @@ abstract class AppDataBase: RoomDatabase(){
     private object Single{
         val sin: AppDataBase = Room.databaseBuilder(
             APP.instances,AppDataBase::class.java,"APP.db"
-        ).addMigrations(_v1Tov2Migration)
-                .allowMainThreadQueries()
+        ).addMigrations()
+                .setQueryExecutor(newSingleThreadExecutor("数据库查询"))
                 .build()
     }
 

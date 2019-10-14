@@ -1,26 +1,27 @@
-package com.hezhihu89.jetpackdemo
+package com.hezhihu89.fragment.room
 
 
 import android.os.Bundle
+import android.os.Debug
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.hezhihu89.fragment.dao.AppDataBase
-import com.hezhihu89.fragment.dao.BaseDao
-import com.hezhihu89.fragment.dao.UserDao
-import com.hezhihu89.fragment.entity.Address
-import com.hezhihu89.fragment.entity.User
-import com.hezhihu89.fragment.kt.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.hezhihu89.dao.AppDataBase
+import com.hezhihu89.dao.UserDao
+import com.hezhihu89.entity.Address
+import com.hezhihu89.entity.User
+import com.hezhihu89.jetpackdemo.R
+import com.hezhihu89.kt.*
 import kotlinx.android.synthetic.main.fragment_room.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,29 +54,55 @@ class RoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val userDao = AppDataBase.instance.getUserDao()
+
+        initRecyclerView(userDao)
 
         room_insert.setOnClickListener{
             insertUser()
         }
-
-        val userDao = AppDataBase.instance.getUserDao()
-        userDao.getAllByDateAsc().observe(this, Observer {
-            val sb = StringBuilder()
-            sb.append("ID   ").append("|").append("姓名   ").append("|").append("姓   ").append("|").append("城市   ").append("|").append("邮编   ").appendln("|")
-
-            it.forEach{forIt ->
-                sb.appendln("------------------------------------------------------------------")
-                sb.append(forIt.userID).append("    |").append(forIt.userName).append("       |").append(forIt.firstName).append("       |").append(forIt.address.city).append("       |").append(forIt.address.postNumber).appendln("        |")
-            }
-            query_all_tv.text = sb.toString()
-        })
-
         room_delete.click {
             checkEmpt(room_user_id.value())
                     .isFalse {
-                        userDao.delete(room_user_id.value().toLong())
+                        GlobalScope.launch(Dispatchers.Main) {
+                            Log.d("当前线程 launch","线程 ---- ${Thread.currentThread()}")
+                            val text = async(Dispatchers.IO) {
+                                Log.d("当前线程 async","线程 ---- ${Thread.currentThread()}")
+                                userDao.delete(room_user_id.value().toLong())
+                                return@async "100000"
+                            }.await()
+                            Log.d("当前线程 launch return","线程 $text ---- ${Thread.currentThread()}")
+                        }
+                        Log.d("当前线程 launch","线程 是否等待 ---- ${Thread.currentThread()}")
                     }
         }
+    }
+
+    /**
+     * 初始化RecyclerView
+     */
+    private fun initRecyclerView(userDao: UserDao) {
+        val adapter = room_recycler.apply <User,BaseViewHolder>{
+            layoutManager = LinearLayoutManager(context)
+
+            itemType(0,R.layout.room_item_layout){
+                setText(R.id.room_item_id,it.userID.toString())
+                setText(R.id.room_item_name,it.userName)
+                setText(R.id.room_item_first_name,it.firstName)
+                setText(R.id.room_item_last_name,it.lastName)
+                setText(R.id.room_item_address,it.address.city)
+                setText(R.id.room_item_post_number,it.address.postNumber.toString())
+            }
+
+            itemType(1,R.layout.room_item_header_layout){
+
+            }
+        }
+        userDao.getAllByDateAsc().observe(this, Observer {
+            it.add(0,User.type(1))
+            adapter.setNewData(it)
+        })
+
     }
 
     /**
@@ -100,7 +127,9 @@ class RoomFragment : Fragment() {
                 .isFalse {
                     Toast.makeText(context,"插入数据库",Toast.LENGTH_SHORT).show()
                     val userDao = AppDataBase.instance.getUserDao()
-                    userDao.insert(User(userId,userName, firstName, lastName,Address("北京",10090)))
+                    GlobalScope.launch(Dispatchers.IO) {
+                        userDao.insert(User(userId,userName, firstName, lastName,Address("北京",10090)))
+                    }
                 }
                 .isTrue {
                     Toast.makeText(context,"输入为空",Toast.LENGTH_SHORT).show()

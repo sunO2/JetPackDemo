@@ -64,7 +64,7 @@
         tools:layout="@layout/fragment_camera_x" />
     <fragment
         android:id="@+id/roomFragment"
-        android:name="com.hezhihu89.jetpackdemo.RoomFragment"
+        android:name="com.hezhihu89.fragment.room.RoomFragment"
         android:label="fragment_room"
         tools:layout="@layout/fragment_room" />
 </navigation>

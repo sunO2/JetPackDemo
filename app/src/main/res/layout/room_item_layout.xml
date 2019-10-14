@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="600dp"
+    android:layout_height="32dp">
+
+    <TextView
+        android:layout_weight="1"
+        android:text="ID"
+        android:id="@+id/room_item_id"
+        android:padding="4dp"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:text="姓名"
+        android:padding="4dp"
+        android:id="@+id/room_item_name"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:text="姓"
+        android:padding="4dp"
+        android:id="@+id/room_item_first_name"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:text="名"
+        android:padding="4dp"
+        android:id="@+id/room_item_last_name"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:text="地址"
+        android:padding="4dp"
+        android:id="@+id/room_item_address"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_weight="1"
+        android:text="邮编"
+        android:padding="4dp"
+        android:id="@+id/room_item_post_number"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>

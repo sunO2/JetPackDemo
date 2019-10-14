@@ -1,5 +1,6 @@
-package com.hezhihu89.fragment.dao
+package com.hezhihu89.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,13 +16,13 @@ interface BaseDao<T> {
     /**
      * 插入一条数据
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(element: T)
 
     /**
      * 插入多条数据
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(list: MutableList<T>)
 
     /**

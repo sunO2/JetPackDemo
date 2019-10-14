@@ -7,7 +7,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <uses-sdk tools:overrideLibrary="androidx.camera.camera2,androidx.camera.core" />
+    <uses-sdk tools:overrideLibrary="androidx.camera.camera2,
+    androidx.camera.core,
+    androidx.camera.extensions,
+    androidx.camera.view" />
 
     <application
         android:allowBackup="true"

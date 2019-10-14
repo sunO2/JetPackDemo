@@ -1,4 +1,4 @@
-package com.hezhihu89.fragment.kt
+package com.hezhihu89.kt
 
 import android.view.View
 import android.widget.TextView

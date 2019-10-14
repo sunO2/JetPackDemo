@@ -6,15 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.hezhihu89.fragment.cameraX.CameraXFragment">
 
-    <TextureView
-        android:id="@+id/jet_pack_camera_texture"
+    <androidx.camera.view.CameraView
+        android:id="@+id/jet_pack_camera_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/jet_pack_cameraX_take_pre"
@@ -31,19 +26,19 @@
 
 
     <Button
+        android:id="@+id/jet_pack_cameraX_take"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:id="@+id/jet_pack_cameraX_take"
         android:text="@string/jet_pack_cameraX_take"
-        app:layout_constraintBottom_toBottomOf="@+id/jet_pack_camera_texture"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/jet_pack_camera_texture"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.89" />
 
 
     <ScrollView

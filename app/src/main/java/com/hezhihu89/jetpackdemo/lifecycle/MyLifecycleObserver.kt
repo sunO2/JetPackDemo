@@ -1,16 +1,23 @@
 package com.hezhihu89.jetpackdemo.lifecycle
 
 import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.*
 
 /**
  * @author hezhihu89
  * 创建时间 2019 年 10 月 08 日 14:37
  * 功能描述: 用于监听生命周期的类
  */
-class MyLifecycleObserver:  LifecycleObserver{
+class MyLifecycleObserver: LifecycleEventObserver {
+    /**
+     * Called when a state transition event happens.
+     *
+     * @param source The source of the event
+     * @param event The event
+     */
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+
+    }
 
     companion object {
 
